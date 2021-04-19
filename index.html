@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: dzy
  * @Date: 2020-11-18 14:19:12
- * @LastEditTime: 2021-04-16 18:32:43
+ * @LastEditTime: 2021-04-19 10:25:05
  * @LastEditors: dzy
  * @Reference: 
 -->
@@ -36,39 +36,34 @@
         top: 50%;
         transform: translate(-50%, -50%);
     }
-    @keyframes rotation {
-        from {
-            transform: rotate(0);
-        }
-        to {
-            transform: rotateZ(360deg);
-        }
-    }
     .hours,.minutes,.seconds {
         background: #000;
         position: absolute;
         transform-origin: bottom;
+        border-radius: 40%;
     }
     .hours {
-        height: 20%;
+        height: 25%;
         width: 5px;
-        top: 30%;
+        top: 25%;
         left: calc(50% - 2.5px);
-        animation: rotation 43200s infinite linear;
+        border-radius: 50%;
+        animation: hourRotation 43200s infinite linear;
     }
     .minutes {
-        height: 28%;
+        height: 34%;
         width: 3px;
-        top: 22%;
+        top: 16%;
         left: calc(50% - 1.5px);
-        animation: rotation 3600s infinite linear;
+        animation: minuteRotation 3600s infinite linear;
     }
     .seconds {
-        height: 35%;
+        height: 42%;
         width: 2px;
-        top: 15%;
+        top: 8%;
         left: calc(50% - 1px);
-        animation: rotation 60s infinite steps(60);
+        background-color: red;
+        animation: secondRotation 60s infinite steps(60);
     }
 </style>
 <body>
@@ -78,4 +73,35 @@
         <div class="seconds"></div>
     </div>
 </body>
+<script>
+    (function () {
+        let currTime = new Date();
+        let hours = currTime.getHours();
+        let minutes = currTime.getMinutes();
+        let seconds = currTime.getSeconds();
+        let style = document.styleSheets[0];
+
+        // 秒针初值
+        let secondsDeg = seconds * 6;
+        let secondsDom = document.querySelector('.seconds');
+        secondsDom.style.transform = "rotate(" + secondsDeg + "deg)";
+        let secondsNewDeg = secondsDeg + 360;
+        style.insertRule("@keyframes secondRotation {from{transform: rotateZ(" + secondsDeg + "deg);} to{transform: rotateZ(" + secondsNewDeg + "deg);}}",6);
+        
+        // 分针初值
+        let minutesDeg = minutes * 6;
+        let minutesDom = document.querySelector('.minutes');
+        minutesDom.style.transform = "rotate(" + minutesDeg + "deg)";
+        let minutesNewDeg = minutesDeg + 360;
+        style.insertRule("@keyframes minuteRotation {from{transform: rotateZ(" + minutesDeg + "deg);} to{transform: rotateZ(" + minutesNewDeg + "deg);}}",5);
+        
+        // 时针初值
+        let hoursDeg = hours * 30 + minutes / 60 * 30;
+        let hoursDom = document.querySelector('.hours');
+        hoursDom.style.transform = "rotate(" + hoursDeg + "deg)";
+        let hoursNewDeg = hoursDeg + 360;
+        style.insertRule("@keyframes hourRotation {from{transform: rotateZ(" + hoursDeg + "deg);} to{transform: rotateZ(" + houresNewDeg + "deg);}}",4);
+    })();
+    
+</script>
 </html>
